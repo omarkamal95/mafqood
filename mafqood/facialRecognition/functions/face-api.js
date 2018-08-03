@@ -25,6 +25,7 @@
   var tfCore_esm = /*#__PURE__*/Object.freeze({
     setBackend: setBackend,
     getBackend: getBackend,
+	
     disposeVariables: disposeVariables,
     memory: memory,
     version_core: version,
@@ -523,11 +524,11 @@
   }
   function resolveInput(arg) {
       if (typeof arg === 'string') {
-          return document.getElementById(arg);
+          return arg;
       }
       return arg;
   }
-  function isLoaded(media) {
+   function isLoaded(media) {
       return (media instanceof HTMLImageElement && media.complete)
           || (media instanceof HTMLVideoElement && media.readyState >= 3);
   }
@@ -635,7 +636,7 @@
           if (isTensor4D(inputs)) {
               this._inputs = unstack(inputs);
           }
-          if (Array.isArray(inputs)) {
+          /* if (Array.isArray(inputs)) {
               this._inputs = inputs.map(function (input, idx) {
                   if (isTensor3D(input)) {
                       // TODO: make sure not to dispose original tensors passed in by the user
@@ -649,13 +650,13 @@
                       }
                       return input.reshape(shape.slice(1));
                   }
-                  var canvas = input instanceof HTMLCanvasElement ? input : createCanvasFromMedia(input);
+                   var canvas = input instanceof HTMLCanvasElement ? input : createCanvasFromMedia(input);
                   if (keepCanvases) {
                       _this._canvases[idx] = canvas;
                   }
                   return fromPixels(canvas);
-              });
-          }
+               });
+          } */
           this._isBatchInput = this.batchSize > 1 || isBatchInput;
           this._inputDimensions = this._inputs.map(function (t) { return t.shape; });
       }
@@ -887,11 +888,11 @@
       return NeuralNetwork;
   }());
 
-  function isMediaElement(input) {
+  /* function isMediaElement(input) {
       return input instanceof HTMLImageElement
           || input instanceof HTMLVideoElement
           || input instanceof HTMLCanvasElement;
-  }
+  } */
 
   /**
    * Validates the input to make sure, they are valid net inputs and awaits all media elements
@@ -928,12 +929,12 @@
                       getIdxHint = function (idx) { return Array.isArray(inputs) ? " at input index " + idx + ":" : ''; };
                       inputArray = inputArgArray.map(resolveInput);
                       inputArray.forEach(function (input, i) {
-                          if (!isMediaElement(input) && !isTensor3D(input) && !isTensor4D(input)) {
+                         /*  if (!isMediaElement(input) && !isTensor3D(input) && !isTensor4D(input)) {
                               if (typeof inputArgArray[i] === 'string') {
                                   throw new Error("toNetInput -" + getIdxHint(i) + " string passed, but could not resolve HTMLElement for element id " + inputArgArray[i]);
                               }
                               throw new Error("toNetInput -" + getIdxHint(i) + " expected media to be of type HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | tf.Tensor3D, or to be an element id");
-                          }
+                          } */
                           if (isTensor4D(input)) {
                               // if tf.Tensor4D is passed in the input array, the batch size has to be 1
                               var batchSize = input.shape[0];
@@ -943,7 +944,7 @@
                           }
                       });
                       // wait for all media elements being loaded
-                      return [4 /*yield*/, Promise.all(inputArray.map(function (input) { return isMediaElement(input) && awaitMediaLoaded(input); }))];
+                      //return [4 /*yield*/, Promise.all(inputArray.map(function (input) { return isMediaElement(input) && awaitMediaLoaded(input); }))];
                   case 1:
                       // wait for all media elements being loaded
                       _a.sent();
@@ -1400,7 +1401,7 @@
       ctx.font = drawOptions.fontSize + "px " + drawOptions.fontStyle;
       ctx.fillText(text, x + padText, y + padText + (drawOptions.fontSize * 0.6));
   }
-  function drawDetection(canvasArg, detection, options) {
+ /*  function drawDetection(canvasArg, detection, options) {
       var canvas = resolveInput(canvasArg);
       if (!(canvas instanceof HTMLCanvasElement)) {
           throw new Error('drawBox - expected canvas to be of type: HTMLCanvasElement');
@@ -1419,7 +1420,7 @@
           }
       });
   }
-  function drawContour(ctx, points, isClosed) {
+  */ function drawContour(ctx, points, isClosed) {
       if (isClosed === void 0) { isClosed = false; }
       ctx.beginPath();
       points.slice(1).forEach(function (_a, prevIdx) {
@@ -1441,10 +1442,10 @@
   }
   function drawLandmarks(canvasArg, faceLandmarks, options) {
       var canvas = resolveInput(canvasArg);
-      if (!(canvas instanceof HTMLCanvasElement)) {
+      /* if (!(canvas instanceof HTMLCanvasElement)) {
           throw new Error('drawLandmarks - expected canvas to be of type: HTMLCanvasElement');
       }
-      var drawOptions = Object.assign(getDefaultDrawOptions(), (options || {}));
+       */var drawOptions = Object.assign(getDefaultDrawOptions(), (options || {}));
       var drawLines = Object.assign({ drawLines: false }, (options || {})).drawLines;
       var ctx = getContext2dOrThrow(canvas);
       var lineWidth = drawOptions.lineWidth, color = drawOptions.color;
@@ -1493,7 +1494,7 @@
               switch (_a.label) {
                   case 0:
                       canvas = input;
-                      if (!!(input instanceof HTMLCanvasElement)) return [3 /*break*/, 3];
+                      //if (!!(input instanceof HTMLCanvasElement)) return [3 /*break*/, 3];
                       return [4 /*yield*/, toNetInput(input, true)];
                   case 1:
                       netInput = _a.sent();
@@ -3650,7 +3651,7 @@
   exports.getDefaultDrawOptions = getDefaultDrawOptions;
   exports.drawBox = drawBox;
   exports.drawText = drawText;
-  exports.drawDetection = drawDetection;
+//  exports.drawDetection = drawDetection;
   exports.drawLandmarks = drawLandmarks;
   exports.euclideanDistance = euclideanDistance;
   exports.extractFaces = extractFaces;

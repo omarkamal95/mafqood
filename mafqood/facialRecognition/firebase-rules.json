@@ -1,0 +1,12 @@
+{
+"rules": {
+  "lastmodified": {
+    ".write": "true",
+    ".read": "true"
+  },
+  "peopleProfiles": {
+    ".write": "true",
+    ".read": "true"
+  }
+}
+}
